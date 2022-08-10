@@ -1,5 +1,5 @@
 const logger = require('./logger.service')
-
+const utilService = require('./util.service')
 var gIo = null
 
 function setupSocketAPI(http) {
@@ -13,6 +13,14 @@ function setupSocketAPI(http) {
     socket.on('disconnect', socket => {
       logger.info(`Socket disconnected [id: ${socket.id}]`)
     })
+    // socket.on('new-chess-game', ({user}) => {
+    //   if(socket.chessGameId) return 
+    //     socket.chessGameId = utilService.makeId()
+
+    //     socket.join(data.chessGameId)
+    //     logger.info(`Socket joined chess game [id: ${socket.id}]`)
+
+    // })
     socket.on('move-made', (newFen => {
       console.log(newFen)
       gIo.emit('new-move', newFen)

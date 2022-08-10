@@ -22,6 +22,7 @@ if (process.env.NODE_ENV === 'production') {
 // const authRoutes = require('./api/auth/auth.routes')
 // const userRoutes = require('./api/user/user.routes')
 // const reviewRoutes = require('./api/review/review.routes')
+const crudRoutes = require('./api/crud/crud.routes')
 const { setupSocketAPI } = require('./services/socket.service')
 
 // routes
@@ -31,6 +32,7 @@ const { setupSocketAPI } = require('./services/socket.service')
 // app.use('/api/auth', authRoutes)
 // app.use('/api/user', userRoutes)
 // app.use('/api/review', reviewRoutes)
+app.use('/api/crud', crudRoutes)
 setupSocketAPI(http)
 
 app.get('/game/:gameId', (req, res) => {
@@ -49,7 +51,6 @@ app.get('/assets/:fileName', (req, res) => {
 app.get('/**', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'))
 })
-
 
 const logger = require('./services/logger.service')
 const port = process.env.PORT || 3031
