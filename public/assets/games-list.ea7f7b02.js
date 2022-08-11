@@ -1,0 +1,2 @@
+import{d as r,r as s,o as e,c as t,F as l,a as c,b as u,w as _,e as i,t as m,f as p}from"./index.b31e9047.js";const x=r({__name:"games-list",setup(d){const n=s(["123","321","567"]);return(f,g)=>{const o=p("router-link");return e(),t("ul",null,[(e(!0),t(l,null,c(n.value,a=>(e(),t("li",null,[u(o,{to:`game/${a}`},{default:_(()=>[i(m(a),1)]),_:2},1032,["to"])]))),256))])}}});export{x as default};
+//# sourceMappingURL=games-list.ea7f7b02.js.map
