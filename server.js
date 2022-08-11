@@ -40,11 +40,13 @@ app.get('/game/:gameId', (req, res) => {
   res.cookie('gameId', gameId, { sameSite: 'None', secure: true })
   res.sendFile(path.join(__dirname, 'public', 'games', `${gameId}`, 'index.html'))
 })
+
 app.get('/assets/:fileName', (req, res) => {
   const { gameId } = req.cookies
   const { fileName } = req.params
   res.sendFile(path.resolve(__dirname, 'public', 'games', `${gameId}`, 'assets', fileName))
 })
+
 // Make every server-side-route to match the index.html
 // so when requesting http://localhost:3030/index.html/car/123 it will still respond with
 // our SPA (single page app) (the index.html file) and allow vue/react-router to take it from there

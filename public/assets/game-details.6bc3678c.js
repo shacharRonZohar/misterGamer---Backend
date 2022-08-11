@@ -1,2 +1,0 @@
-import{d as e,_ as a,o as t,c as s,F as r,g as o,a as n}from"./index.c0a4e500.js";const m=e({name:"game-details",data(){return{game:""}},watch:{"this.$route.params.gameId":{async handler(){this.game=this.$route.params.gameId||""},immediate:!0}}}),c=o(" Im game details "),d=n("iframe",{src:"http://localhost:3031/game/123",frameborder:"0"},null,-1);function i(l,_,p,g,h,u){return t(),s(r,null,[c,d],64)}const $=a(m,[["render",i]]);export{$ as default};
-//# sourceMappingURL=game-details.6bc3678c.js.map
