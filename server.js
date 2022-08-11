@@ -38,7 +38,7 @@ setupSocketAPI(http)
 app.get('/game/:gameId', (req, res) => {
   const { gameId } = req.params
   res.cookie('gameId', gameId, { sameSite: 'None', secure: true })
-  res.sendFile(path.join(__dirname, 'public', 'games', `${gameId}`, 'index.html'))
+  res.sendFile(path.join(__dirname, 'games', `${gameId}`, 'index.html'))
 })
 
 app.get('/assets/:fileName', (req, res) => {
