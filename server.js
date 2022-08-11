@@ -44,7 +44,7 @@ app.get('/game/:gameId', (req, res) => {
 app.get('/assets/:fileName', (req, res) => {
   const { gameId } = req.cookies
   const { fileName } = req.params
-  res.sendFile(path.resolve(__dirname, 'public', 'games', `${gameId}`, 'assets', fileName))
+  res.sendFile(path.resolve(__dirname, 'games', `${gameId}`, 'assets', fileName))
 })
 
 // Make every server-side-route to match the index.html
