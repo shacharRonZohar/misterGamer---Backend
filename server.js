@@ -22,6 +22,7 @@ if (process.env.NODE_ENV === 'production') {
 // const authRoutes = require('./api/auth/auth.routes')
 // const userRoutes = require('./api/user/user.routes')
 // const reviewRoutes = require('./api/review/review.routes')
+const gameRoutes = require('./api/game/game.routes')
 const crudRoutes = require('./api/crud/crud.routes')
 const { setupSocketAPI } = require('./services/socket.service')
 
@@ -33,9 +34,10 @@ const { setupSocketAPI } = require('./services/socket.service')
 // app.use('/api/user', userRoutes)
 // app.use('/api/review', reviewRoutes)
 app.use('/api/crud', crudRoutes)
+app.use('/api/game', gameRoutes)
 setupSocketAPI(http)
 
-app.get('/game/:gameId', (req, res) => {
+app.get('/play/:gameId', (req, res) => {
   const { gameId } = req.params
   res.cookie('gameId', gameId, { sameSite: 'None', secure: true })
   res.sendFile(path.join(__dirname, 'games', `${gameId}`, 'index.html'))
