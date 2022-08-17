@@ -25,8 +25,8 @@ async function add(game) {
     const newGame = await collection.insertOne(game)
     const dirPath = path.resolve('games', newGame.ops[0]._id.toString())
     fs.mkdir(dirPath)
-    exec(`git clone https://github.com/shacharRonZohar/Contact-Manager.git ${dirPath}`)
-    exec('git checkout gh-pages', { cwd: dirPath })
+    // exec(`git clone https://github.com/shacharRonZohar/Contact-Manager.git ${dirPath}`)
+    // exec('git checkout gh-pages', { cwd: dirPath })
     // fs.mkdir(path), (err) => {
     //   if (err) logger.error('Failed making the directory with error:', err)
     //   console.log('Directory created successfully!')
