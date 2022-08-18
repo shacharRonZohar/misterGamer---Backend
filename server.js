@@ -49,6 +49,8 @@ app.get('/assets/:fileName', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'games', `${gameId}`, 'assets', fileName))
 })
 
+
+
 // Make every server-side-route to match the index.html
 // so when requesting http://localhost:3030/index.html/car/123 it will still respond with
 // our SPA (single page app) (the index.html file) and allow vue/react-router to take it from there

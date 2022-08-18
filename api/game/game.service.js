@@ -1,10 +1,8 @@
 const dbService = require('../../services/db.service')
 const logger = require('../../services/logger.service')
-const fs = require('fs/promises')
+const fs = require('fs')
 const path = require('path')
 const { exec } = require('child_process')
-// const ObjectId = require('mongodb').ObjectId
-// const asyncLocalStorage = require('../../services/als.service')
 async function query(filterBy = {}) {
   try {
     const criteria = _buildCriteria(filterBy)
@@ -19,19 +17,20 @@ async function query(filterBy = {}) {
 
 async function add(game) {
   try {
+    // console.log(game)
     game.createdAt = Date.now()
     game.updatedAt = Date.now()
     const collection = await dbService.getCollection('game')
     const newGame = await collection.insertOne(game)
     const dirPath = path.resolve('games', newGame.ops[0]._id.toString())
-    fs.mkdir(dirPath)
-    // exec(`git clone https://github.com/shacharRonZohar/Contact-Manager.git ${dirPath}`)
-    // exec('git checkout gh-pages', { cwd: dirPath })
-    // fs.mkdir(path), (err) => {
-    //   if (err) logger.error('Failed making the directory with error:', err)
-    //   console.log('Directory created successfully!')
-    //   exec('git clone https://github.com/shacharRonZohar/Contact-Manager.git', {})
-    // })
+    await fs.promises.mkdir(dirPath)
+    game.data.forEach(async ({ name, data, path: filePath }) => {
+      filePath = filePath.replace(/dist/, '')
+      const fileDirPath = path.resolve(dirPath, filePath.slice(filePath.indexOf('/') + 1, filePath.lastIndexOf('/')))
+      const isDirExists = fs.existsSync(fileDirPath)
+      if (!isDirExists) await fs.promises.mkdir(fileDirPath)
+      fs.promises.writeFile(path.resolve(fileDirPath, name), data)
+    })
     return newGame.ops[0]
   } catch (err) {
     logger.error('cannot add game', err)
