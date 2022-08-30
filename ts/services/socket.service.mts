@@ -1,14 +1,23 @@
-const logger = require('./logger.service')
-const utilService = require('./util.service')
-var gIo = null
+// TODO: Finish converting to TS and cleanup
+import { logger } from './logger.service.mjs'
+import { Server } from 'socket.io'
+
+export const sockerService = { // set up the sockets service and define the API
+  setupSocketAPI,
+  // emit to everyone / everyone in a specific room (label)
+  emitTo,
+  // emit to a specific user (if currently active in system)
+  emitToUser,
+  // Send to all sockets BUT not the current socket - if found
+  // (otherwise broadcast to a room / to all)
+  broadcast,
+}
+
+let gIo: Server
 
 function setupSocketAPI(http) {
-  console.log(typeof require('socket.io')(http, {
-    cors: {
-      origin: '*',
-    }
-  }))
-  gIo = require('socket.io')(http, {
+  // TODO: Check if this works
+  gIo = new Server(http, {
     cors: {
       origin: '*',
     }
@@ -18,48 +27,10 @@ function setupSocketAPI(http) {
     socket.on('disconnect', socket => {
       logger.info(`Socket disconnected [id: ${socket.id}]`)
     })
-    // socket.on('new-chess-game', ({user}) => {
-    //   if(socket.chessGameId) return 
-    //     socket.chessGameId = utilService.makeId()
-
-    //     socket.join(data.chessGameId)
-    //     logger.info(`Socket joined chess game [id: ${socket.id}]`)
-
-    // })
     socket.on('move-made', (newFen => {
       console.log(newFen)
       gIo.emit('new-move', newFen)
     }))
-    // socket.on('chat-set-topic', topic => {
-    //     if (socket.myTopic === topic) return
-    //     if (socket.myTopic) {
-    //         socket.leave(socket.myTopic)
-    //         logger.info(`Socket is leaving topic ${socket.myTopic} [id: ${socket.id}]`)
-    //     }
-    //     socket.join(topic)
-    //     socket.myTopic = topic
-    // })
-    // socket.on('chat-send-msg', msg => {
-    //     logger.info(`New chat msg from socket [id: ${socket.id}], emitting to topic ${socket.myTopic}`)
-    //     // emits to all sockets:
-    //     // gIo.emit('chat addMsg', msg)
-    //     // emits only to sockets in the same room
-    //     gIo.to(socket.myTopic).emit('chat-add-msg', msg)
-    // })
-    // socket.on('user-watch', userId => {
-    //     logger.info(`user-watch from socket [id: ${socket.id}], on user ${userId}`)
-    //     socket.join('watching:' + userId)
-
-    // })
-    // socket.on('set-user-socket', userId => {
-    //     logger.info(`Setting socket.userId = ${userId} for socket [id: ${socket.id}]`)
-    //     socket.userId = userId
-    // })
-    // socket.on('unset-user-socket', () => {
-    //     logger.info(`Removing socket.userId for socket [id: ${socket.id}]`)
-    //     delete socket.userId
-    // })
-
   })
 }
 
@@ -118,16 +89,4 @@ async function _printSockets() {
 }
 function _printSocket(socket) {
   console.log(`Socket - socketId: ${socket.id} userId: ${socket.userId}`)
-}
-
-module.exports = {
-  // set up the sockets service and define the API
-  setupSocketAPI,
-  // emit to everyone / everyone in a specific room (label)
-  emitTo,
-  // emit to a specific user (if currently active in system)
-  emitToUser,
-  // Send to all sockets BUT not the current socket - if found
-  // (otherwise broadcast to a room / to all)
-  broadcast,
 }
