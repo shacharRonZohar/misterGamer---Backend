@@ -3,9 +3,9 @@ const logger = require('../../services/logger.service')
 const fs = require('fs')
 const path = require('path')
 const { exec } = require('child_process')
+
 async function query(filterBy = {}) {
   try {
-    const criteria = _buildCriteria(filterBy)
     const collection = await dbService.getCollection('game')
     const games = await collection.find(criteria).toArray()
     return games
@@ -17,21 +17,22 @@ async function query(filterBy = {}) {
 
 async function add(game) {
   try {
-    // console.log(game)
+    const { files } = game
+    delete game.files
     game.createdAt = Date.now()
     game.updatedAt = Date.now()
     const collection = await dbService.getCollection('game')
-    const newGame = await collection.insertOne(game)
-    const dirPath = path.resolve('games', newGame.ops[0]._id.toString())
+    const { ops: [newGame] } = await collection.insertOne(game)
+    const dirPath = path.resolve('games', newGame._id.toString())
     await fs.promises.mkdir(dirPath)
-    game.data.forEach(async ({ name, data, path: filePath }) => {
+    files.forEach(async ({ name, data, path: filePath }) => {
       filePath = filePath.replace(/dist/, '')
       const fileDirPath = path.resolve(dirPath, filePath.slice(filePath.indexOf('/') + 1, filePath.lastIndexOf('/')))
       const isDirExists = fs.existsSync(fileDirPath)
       if (!isDirExists) await fs.promises.mkdir(fileDirPath)
       fs.promises.writeFile(path.resolve(fileDirPath, name), data)
     })
-    return newGame.ops[0]
+    return newGame
   } catch (err) {
     logger.error('cannot add game', err)
     throw err
@@ -80,5 +81,3 @@ module.exports = {
   // remove,
   add
 }
-
-

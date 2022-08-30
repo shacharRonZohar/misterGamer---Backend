@@ -8,7 +8,7 @@ const http = require('http').createServer(app)
 
 // Express App Config
 app.use(cookieParser())
-app.use(express.json())
+app.use(express.json({ limit: '50mb' }))
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.resolve(__dirname, 'public')))
 } else {
@@ -41,6 +41,7 @@ app.get('/play/:gameId', (req, res) => {
   const { gameId } = req.params
   res.cookie('gameId', gameId, { sameSite: 'None', secure: true })
   res.sendFile(path.join(__dirname, 'games', `${gameId}`, 'index.html'))
+  './games/62fd4a82e7523cf8b9fc6c0f/index.html'
 })
 
 app.get('/assets/:fileName', (req, res) => {
@@ -48,8 +49,6 @@ app.get('/assets/:fileName', (req, res) => {
   const { fileName } = req.params
   res.sendFile(path.resolve(__dirname, 'games', `${gameId}`, 'assets', fileName))
 })
-
-
 
 // Make every server-side-route to match the index.html
 // so when requesting http://localhost:3030/index.html/car/123 it will still respond with
