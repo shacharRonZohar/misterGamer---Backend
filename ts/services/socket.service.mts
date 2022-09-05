@@ -27,10 +27,11 @@ function setupSocketAPI(http) {
     socket.on('disconnect', socket => {
       logger.info(`Socket disconnected [id: ${socket.id}]`)
     })
-    socket.on('move-made', (newFen => {
-      console.log(newFen)
-      gIo.emit('new-move', newFen)
-    }))
+    for (const key in )
+      socket.on('move-made', (newFen => {
+        console.log(newFen)
+        gIo.emit('new-move', newFen)
+      }))
   })
 }
 

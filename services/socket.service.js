@@ -1,7 +1,9 @@
 const logger = require('./logger.service')
 const utilService = require('./util.service')
 var gIo = null
-
+const testObj = {
+  []
+}
 function setupSocketAPI(http) {
   console.log(typeof require('socket.io')(http, {
     cors: {
@@ -18,6 +20,7 @@ function setupSocketAPI(http) {
     socket.on('disconnect', socket => {
       logger.info(`Socket disconnected [id: ${socket.id}]`)
     })
+    socket.on()
     // socket.on('new-chess-game', ({user}) => {
     //   if(socket.chessGameId) return 
     //     socket.chessGameId = utilService.makeId()
